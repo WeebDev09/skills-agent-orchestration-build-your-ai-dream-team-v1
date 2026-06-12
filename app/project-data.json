@@ -1,0 +1,32 @@
+{
+  "projects": [
+    {
+      "name": "Pulse Redesign",
+      "owner": "Mona Ellis",
+      "status": "On Track",
+      "recentActivity": "UI review completed, ready for handoff.",
+      "priority": "High"
+    },
+    {
+      "name": "Sprint Planning",
+      "owner": "Noah Chen",
+      "status": "At Risk",
+      "recentActivity": "Dependencies delayed, team recalibration in progress.",
+      "priority": "Medium"
+    },
+    {
+      "name": "Customer Onboarding",
+      "owner": "Priya Rao",
+      "status": "Off Track",
+      "recentActivity": "Integration tests failing on key API endpoint.",
+      "priority": "High"
+    },
+    {
+      "name": "Roadmap Sync",
+      "owner": "Avery Kim",
+      "status": "On Track",
+      "recentActivity": "Stakeholder alignment session scheduled.",
+      "priority": "Low"
+    }
+  ]
+}

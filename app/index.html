@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Pulse</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="dashboard" aria-label="Project Pulse Dashboard">
+      <header class="dashboard__header">
+        <div>
+          <p class="eyebrow">Project Pulse</p>
+          <h1>Active projects at a glance</h1>
+        </div>
+        <div class="dashboard__summary">
+          <div class="summary-card">
+            <span>Live projects</span>
+            <strong id="project-count">0</strong>
+          </div>
+          <div class="summary-card">
+            <span>High priority</span>
+            <strong id="priority-count">0</strong>
+          </div>
+        </div>
+      </header>
+
+      <section class="dashboard__grid" id="project-grid" aria-live="polite">
+        <!-- Project cards render here -->
+      </section>
+    </main>
+
+    <script>
+      async function loadProjects() {
+        const response = await fetch('project-data.json');
+        const data = await response.json();
+        const projects = Array.isArray(data.projects) ? data.projects : [];
+
+        const grid = document.getElementById('project-grid');
+        const projectCount = document.getElementById('project-count');
+        const priorityCount = document.getElementById('priority-count');
+
+        projectCount.textContent = projects.length;
+        priorityCount.textContent = projects.filter(p => p.priority === 'High').length;
+
+        if (!projects.length) {
+          grid.innerHTML = '<div class="empty-state">No projects available.</div>';
+          return;
+        }
+
+        grid.innerHTML = projects
+          .map(project => {
+            const status = project.status || 'Unknown';
+            const priority = project.priority || 'Normal';
+            const recent = project.recentActivity || 'No recent updates';
+            const owner = project.owner || 'Unassigned';
+
+            return `
+            <article class="project-card" tabindex="0">
+              <div class="project-card__top">
+                <div>
+                  <p class="project-card__name">${project.name}</p>
+                  <p class="project-card__owner">Owner: ${owner}</p>
+                </div>
+                <span class="badge badge--${status.toLowerCase().replace(/\s+/g, '-')}">${status}</span>
+              </div>
+              <p class="project-card__activity">Recent activity: ${recent}</p>
+              <div class="project-card__meta">
+                <span class="priority">Priority: ${priority}</span>
+              </div>
+            </article>`;
+          })
+          .join('');
+      }
+
+      loadProjects().catch(() => {
+        const grid = document.getElementById('project-grid');
+        grid.innerHTML = '<div class="empty-state">Unable to load project data.</div>';
+      });
+    </script>
+  </body>
+</html>

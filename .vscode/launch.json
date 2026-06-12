@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Project Pulse Dashboard",
+      "type": "pwa-node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/app",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "5500"],
+      "port": 5500,
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "Serving HTTP on .*port 5500",
+        "uri": "http://localhost:%s/index.html"
+      }
+    }
+  ]
+}

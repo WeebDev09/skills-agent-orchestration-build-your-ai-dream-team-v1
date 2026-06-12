@@ -1,71 +1,79 @@
-# Project Pulse — Implementation Plan
+# Project Pulse Implementation Plan
 
-Summary
+## Summary and Goal
 
-- Goal: Build Mona's Project Pulse dashboard — a responsive frontend dashboard that surfaces active projects, status badges, priorities, and quick filters.
-- Outcome: A runnable static frontend preview in `app/` showing an initial set of project cards, clear status indicators, and styling hooks for later integration.
+- Build a focused Project Pulse dashboard in `app/` that displays project health, status badges, priorities, owner assignment, and milestone alerts from a local JSON fixture.
+- Deliver a runnable static frontend preview with a clear visual structure, responsive layout, and an accessible user experience.
 
-Ordered Implementation Steps
+## Ordered Implementation Steps
 
-1. Planner: Research & file-scope plan (this document) — confirm data shape and acceptance criteria.
-2. Orchestrator: Break plan into phases and assign files to agents.
-3. Designer: Create visual direction and CSS hooks in the assigned style files.
-4. Coder: Implement markup, layout, and minimal data fixtures in `app/`.
-5. Coder: Add runnable support (`.vscode/launch.json`) per repo guidance so the preview opens `app/index.html`.
-6. Integration & Validation: Designer + Coder validate accessibility, responsiveness, and visual parity.
+1. Finalize project scope and data contract — **Planner**.
+2. Create the seed dataset scheme and file — **Planner + Coder** (`app/project-data.json`).
+3. Build the HTML structure and semantic layout — **Coder** (`app/index.html`).
+4. Design and implement CSS tokens, responsive layout, and dashboard visuals — **Designer + Coder** (`app/styles.css`).
+5. Add data loading and interactivity for filters/status and card expansion — **Coder**.
+6. Configure the local preview launch workflow — **Orchestrator** (`.vscode/launch.json`).
+7. Perform accessibility and visual QA — **Designer + Coder**.
+8. Validate smoke tests and finalize documentation — **Orchestrator + Coder**.
 
-File Assignments
+## File Assignments
 
-- `docs/project-pulse-plan.md` — Planner (this file)
-- `.github/agents/*` — Orchestrator (coordination only)
-- `app/index.html`, `app/styles.css`, `app/scripts.js` — Coder (implementation)
-- `app/components/project-card.html` or `app/partials/` — Designer & Coder (visual + markup)
-- `.vscode/launch.json` (optional) — Coder (runnable preview)
+- `app/index.html` — Main dashboard page, semantic structure, component placeholders, and ARIA landmarks.
+- `app/styles.css` — Core styling, responsive grid, CSS hooks, visual tokens, and accessible contrast rules.
+- `app/project-data.json` — Deterministic static fixture for projects, status, priorities, owners, due dates, and milestones.
+- `.vscode/launch.json` — Local preview configuration to open `app/index.html` in the Codespace environment.
 
-App file assignments (detailed)
+## Designer Responsibilities
 
-- `app/index.html` — Main dashboard entry point. Renders the project list, header, filters, and placeholders for empty states.
-- `app/styles.css` — Core styling, responsive layout, and deterministic CSS hooks such as `.dashboard` and `.project-card`. Designer-owned with Coder integration.
-- `app/scripts.js` — Minimal client logic to load fixtures, render project cards, and implement filters and interactions.
-- `app/data/projects.json` — Deterministic static fixtures for initial development and validation (fields: `id`, `name`, `status`, `priority`, `owner`, `due_date`, `tags`).
-- `app/components/project-card.html` — Markup/template for a single project card (or a JS template in `scripts.js`). Designer + Coder collaborate on structure.
-- `app/images/` — Icons and badge assets used by the dashboard.
-- `app/vendor/` — Optional third-party assets (normalize/reset, tiny helper libs). Keep vendor files explicit and minimal.
-- `.vscode/launch.json` — Launch configuration to open `app/index.html` as a preview (`cwd` set to `${workspaceFolder}/app`).
+- Produce the visual design system: color palette, typography scale, spacing, and responsive breakpoints.
+- Define accessible component behavior for project cards, badges, filters, and focus states.
+- Provide mockups or design guidance for desktop, tablet, and mobile layouts.
+- Specify ARIA roles, labels, and keyboard interactions for interactive dashboard elements.
+- Annotate empty/error states, tooltip text, and visual priority treatment.
 
-Ownership notes: Designer focuses on `app/styles.css` and `app/components/*`; Coder owns `app/index.html`, `app/scripts.js`, `app/data/*`, and `.vscode/launch.json`.
+## Coder Responsibilities
 
-Dependencies and Sequencing
+- Implement semantic HTML in `app/index.html` with proper document structure and landmarks.
+- Create responsive CSS in `app/styles.css` using the Designer's tokens and accessible patterns.
+- Load and validate `app/project-data.json`; render cards and dashboard metrics from the fixture.
+- Build interactive behavior: status filtering, priority sorting, and expandable project detail sections.
+- Add keyboard navigation and ARIA attributes to support accessibility.
+- Document local launch steps and where to update the fixture data.
 
-- Step 1 (Planner) must complete before Orchestrator phases are assigned.
-- Designer and Coder work can run in parallel after the Orchestrator assigns non-overlapping file scopes (e.g., Designer: `app/styles.css`; Coder: `app/index.html`, fixtures).
-- `.vscode/launch.json` creation depends on Coder implementing `app/index.html`.
+## Dependencies
 
-Parallelizable Work
+- Designer mockups or token guidance needed before finalizing CSS.
+- `app/project-data.json` seed data required before wiring dashboard content.
+- `.vscode/launch.json` can be authored anytime but should be validated after `app/index.html` exists.
+- Accessibility validation is dependent on implemented interactive behaviors.
 
-- Designer: visual mockups and CSS scaffolding.
-- Coder: static markup and data fixtures.
-- Accessibility testing can run in parallel with visual polish.
+## Parallel Work Decisions
 
-Edge Cases & Risks
+- Can run in parallel:
+  - Designer finalizing visual tokens while Coder builds the HTML skeleton.
+  - Planner refining the data contract while Coder starts static layout.
+  - Orchestrator preparing `.vscode/launch.json` while Coder adds interactivity.
+- Must be sequential:
+  - Complete token and layout design before CSS polish.
+  - Complete interactive feature implementation before final accessibility remediation.
 
-- Unknown data shape from backend — mitigate by using deterministic fixtures and clear data contract in this plan.
-- Conflicting file scopes — Orchestrator must explicitly assign file ownership for each phase.
-- Browser layout differences — test at common breakpoints and include fallbacks for reduced motion and font-size overrides.
+## Validation Expectations
 
-Validation Expectations
+- Visual: dashboard aligns with the project Pulse look and feel, with clear cards, badges, and responsive spacing.
+- Accessibility: WCAG AA contrast on primary UI elements; keyboard navigation works; screen readers can announce dashboard components.
+- Functionality: project data loads successfully from `app/project-data.json`; filtering and status views respond correctly.
+- Smoke tests: page opens locally without console errors; core interactions execute successfully.
 
-- Visual: First view clearly looks like a Project Pulse dashboard with project cards and status badges.
-- Accessibility: Color contrast meets WCAG AA for primary UI elements; keyboard focus order is logical.
-- Functionality: Filters and priority indicators work with static fixtures; page opens via launch config.
-- Tests: Manual checklist and a small smoke test opening `app/index.html` in a browser.
+## Edge Cases and Risks
 
-Open Questions
+- Missing JSON fields: implement fallbacks and safe defaults.
+- Large datasets: ensure performance remains acceptable or note limits for later pagination.
+- Time formatting: normalize timestamps and display user-friendly dates.
+- Color-only status cues: combine badges, labels, and icons for accessibility.
 
-- Do you want real backend integration in this exercise, or should we keep static fixtures and document the API contract for later work?
-- Which breakpoints (mobile/tablet/desktop) are highest priority for the initial view?
+## Open Questions
 
-Next Steps
-
-- Confirm answers to the open questions.
-- If confirmed, I can: (A) implement the `app/` scaffold and CSS hooks, or (B) stage/commit/push this plan now.
+- Should `app/project-data.json` be editable by non-developers, or is it strictly a developer fixture?
+- Will there be later backend integration, or should this remain static for now?
+- Which dev preview workflow is preferred: simple HTTP server, VS Code preview, or live-server?
+- Are there any branding or font-family constraints to enforce in the dashboard?

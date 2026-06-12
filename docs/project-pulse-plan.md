@@ -22,6 +22,19 @@ File Assignments
 - `app/components/project-card.html` or `app/partials/` — Designer & Coder (visual + markup)
 - `.vscode/launch.json` (optional) — Coder (runnable preview)
 
+App file assignments (detailed)
+
+- `app/index.html` — Main dashboard entry point. Renders the project list, header, filters, and placeholders for empty states.
+- `app/styles.css` — Core styling, responsive layout, and deterministic CSS hooks such as `.dashboard` and `.project-card`. Designer-owned with Coder integration.
+- `app/scripts.js` — Minimal client logic to load fixtures, render project cards, and implement filters and interactions.
+- `app/data/projects.json` — Deterministic static fixtures for initial development and validation (fields: `id`, `name`, `status`, `priority`, `owner`, `due_date`, `tags`).
+- `app/components/project-card.html` — Markup/template for a single project card (or a JS template in `scripts.js`). Designer + Coder collaborate on structure.
+- `app/images/` — Icons and badge assets used by the dashboard.
+- `app/vendor/` — Optional third-party assets (normalize/reset, tiny helper libs). Keep vendor files explicit and minimal.
+- `.vscode/launch.json` — Launch configuration to open `app/index.html` as a preview (`cwd` set to `${workspaceFolder}/app`).
+
+Ownership notes: Designer focuses on `app/styles.css` and `app/components/*`; Coder owns `app/index.html`, `app/scripts.js`, `app/data/*`, and `.vscode/launch.json`.
+
 Dependencies and Sequencing
 
 - Step 1 (Planner) must complete before Orchestrator phases are assigned.
